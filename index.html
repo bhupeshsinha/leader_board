@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroStar Leaderboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7fafc;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #2f855a;
+    }
+    .leaderboard {
+      max-width: 500px;
+      margin: 30px auto;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .entry {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .entry:last-child {
+      border-bottom: none;
+    }
+    .rank {
+      font-weight: bold;
+      color: #2f855a;
+    }
+    .name {
+      flex: 1;
+      margin: 0 10px;
+      text-align: left;
+    }
+    .score {
+      color: #718096;
+    }
+  </style>
+</head>
+<body>
+  <h1>AgroStar Leaderboard</h1>
+  <div class="leaderboard" id="leaderboard">
+    <!-- Leaderboard entries will appear here -->
+  </div>
+
+  <!-- <script>
+    const API_URL = 'https://script.google.com/a/macros/agrostar.in/s/AKfycbyGUMT8WYAO_Q_dj1qr3PUvKwXLwkK-aYWeUiwRFNbftnnBTNr8UU9hB98ZOSmc107uew/exec';
+
+async function loadLeaderboard() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const container = document.getElementById('leaderboard');
+    container.innerHTML = '';
+
+    data.forEach(entry => {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      div.innerHTML = `
+        <span class="rank">#${entry.rank}</span>
+        <span class="name">${entry.name}</span>
+        <span class="score">${entry.score} pts</span>
+      `;
+      container.appendChild(div);
+    });
+  } catch (error) {
+    console.error('Error loading leaderboard:', error);
+    document.getElementById('leaderboard').innerText = 'Failed to load data';
+  }
+}
+
+loadLeaderboard();
+  </script> -->
+
+  <script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyXujh-1t2SZxKwI3b2fsZXW995X5ijfdkwj5Z1WlXuA-n4MfF1WUasvTDXouBzkdBxLw/exec';
+
+  // This function will be called by the JSONP response
+  function displayLeaderboard(data) {
+    const container = document.getElementById('leaderboard');
+    container.innerHTML = '';
+
+    data.forEach(entry => {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      div.innerHTML = `
+        <span class="rank">#${entry.rank}</span>
+        <span class="name">${entry.name}</span>
+        <span class="score">${entry.score} pts</span>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function loadLeaderboard() {
+    // Create a script element to load JSONP data
+    const script = document.createElement('script');
+    // Append callback parameter for JSONP
+    script.src = API_URL + '?callback=displayLeaderboard';
+    script.onerror = () => {
+      const container = document.getElementById('leaderboard');
+      container.innerText = 'Failed to load data';
+    };
+    document.body.appendChild(script);
+  }
+
+  loadLeaderboard();
+</script>
+
+</body>
+</html>
