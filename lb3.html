@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroStar Leaderboard</title>
+    <link rel="stylesheet" href="style3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <h1>AgroStar Leaderboard</h1>
+
+  <div class="panel">
+    <button id="btn-tm" class="active" onclick="selectCategory('tm', this)">TM</button>
+    <button onclick="selectCategory('sm', this)">SM</button>
+    <button onclick="selectCategory('cm', this)">CM</button>
+  </div>
+
+  <div class="leaderboard">
+    <div class="podium" id="podium"></div>
+    <div class="rest-list" id="rest-list"></div>
+  </div>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbyXujh-1t2SZxKwI3b2fsZXW995X5ijfdkwj5Z1WlXuA-n4MfF1WUasvTDXouBzkdBxLw/exec';
+
+    function displayLeaderboard(data) {
+      const podium = document.getElementById('podium');
+      const rest = document.getElementById('rest-list');
+      podium.innerHTML = '';
+      rest.innerHTML = '';
+
+      const medals = ['🥇', '🥈', '🥉'];
+
+      // Create podium cards for top 3
+      const podiumOrder = [1, 0, 2]; // Show 2nd, 1st, 3rd
+      podiumOrder.forEach(i => {
+        if (data[i]) {
+          const card = document.createElement('div');
+          card.className = 'podium-card';
+          if (i === 0) card.classList.add('first');
+
+          card.innerHTML = `
+            <div class="medal">${medals[i]}</div>
+            <h2>${data[i].name}</h2>
+            <p>${data[i].score} pts</p>
+          `;
+          podium.appendChild(card);
+        }
+      });
+
+      // Display rest of the entries from 4th onward
+      data.slice(3).forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <span class="rank">#${entry.rank}</span>
+          <span class="name">${entry.name}</span>
+          <span class="score">${entry.score} pts</span>
+        `;
+        rest.appendChild(div);
+      });
+    }
+
+    function selectCategory(category, button) {
+      document.querySelectorAll('.panel button').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      loadLeaderboard(category);
+    }
+
+    function loadLeaderboard(category) {
+      const oldScript = document.getElementById('jsonp-script');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'jsonp-script';
+      script.src = `${BASE_URL}?type=${category}&callback=displayLeaderboard`;
+      script.onerror = () => {
+        document.getElementById('podium').innerHTML = 'Failed to load data';
+      };
+      document.body.appendChild(script);
+    }
+
+    window.onload = () => {
+      const tmButton = document.getElementById('btn-tm');
+      selectCategory('tm', tmButton);
+    };
+  </script>
+</body>
+</html>
