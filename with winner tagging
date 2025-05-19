@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroStar Leaderboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f0fff4, #e6fffa);
+      color: #2d3748;
+      padding: 40px 20px;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2f855a;
+      margin-bottom: 10px;
+    }
+
+    .panel {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .panel button {
+      padding: 10px 24px;
+      border: 2px solid #2f855a;
+      background-color: white;
+      color: #2f855a;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .panel button:hover {
+      background-color: #e6fffa;
+    }
+
+    .panel button.active {
+      background-color: #2f855a;
+      color: white;
+      box-shadow: 0 4px 12px rgba(47, 133, 90, 0.4);
+    }
+
+    .leaderboard {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .podium {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 30px 0;
+    }
+
+    .podium-card {
+      flex: 1;
+      border-radius: 16px;
+      background: #fff9db;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .podium-card h2 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+    }
+
+    .podium-card p {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .medal {
+      font-size: 26px;
+    }
+
+    .first {
+      transform: translateY(-20px);
+      background: #fff7ae;
+    }
+
+    .first h2 {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .rest-list {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .entry {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+
+    .entry:last-child {
+      border-bottom: none;
+    }
+
+    .rank {
+      color: #38a169;
+      font-weight: bold;
+    }
+
+    .name {
+      flex: 1;
+      margin: 0 16px;
+      text-align: left;
+    }
+
+    .score {
+      color: #555;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .podium {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .podium-card {
+        width: 80%;
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>AgroStar Leaderboard</h1>
+
+  <div class="panel">
+    <button id="btn-tm" class="active" onclick="selectCategory('tm', this)">TM</button>
+    <button onclick="selectCategory('sm', this)">SM</button>
+    <button onclick="selectCategory('cm', this)">CM</button>
+  </div>
+
+  <div class="leaderboard">
+    <div class="podium" id="podium"></div>
+    <div class="rest-list" id="rest-list"></div>
+  </div>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbyXujh-1t2SZxKwI3b2fsZXW995X5ijfdkwj5Z1WlXuA-n4MfF1WUasvTDXouBzkdBxLw/exec';
+
+    function displayLeaderboard(data) {
+      const podium = document.getElementById('podium');
+      const rest = document.getElementById('rest-list');
+      podium.innerHTML = '';
+      rest.innerHTML = '';
+
+      const medals = ['🥇', '🥈', '🥉'];
+
+      // Create podium cards for top 3
+      const podiumOrder = [1, 0, 2]; // Show 2nd, 1st, 3rd
+      podiumOrder.forEach(i => {
+        if (data[i]) {
+          const card = document.createElement('div');
+          card.className = 'podium-card';
+          if (i === 0) card.classList.add('first');
+
+          card.innerHTML = `
+            <div class="medal">${medals[i]}</div>
+            <h2>${data[i].name}</h2>
+            <p>${data[i].score} pts</p>
+          `;
+          podium.appendChild(card);
+        }
+      });
+
+      // Display rest of the entries from 4th onward
+      data.slice(3).forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <span class="rank">#${entry.rank}</span>
+          <span class="name">${entry.name}</span>
+          <span class="score">${entry.score} pts</span>
+        `;
+        rest.appendChild(div);
+      });
+    }
+
+    function selectCategory(category, button) {
+      document.querySelectorAll('.panel button').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      loadLeaderboard(category);
+    }
+
+    function loadLeaderboard(category) {
+      const oldScript = document.getElementById('jsonp-script');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'jsonp-script';
+      script.src = `${BASE_URL}?type=${category}&callback=displayLeaderboard`;
+      script.onerror = () => {
+        document.getElementById('podium').innerHTML = 'Failed to load data';
+      };
+      document.body.appendChild(script);
+    }
+
+    window.onload = () => {
+      const tmButton = document.getElementById('btn-tm');
+      selectCategory('tm', tmButton);
+    };
+  </script>
+</body>
+</html>
