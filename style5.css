@@ -1,0 +1,289 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #f7faff, #edf6ff);
+  color: #1a202c;
+  padding: 40px 20px;
+  margin: 0;
+  text-align: center;
+}
+h1 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  text-align: center;
+  margin: 20px 0;
+  color: #1a202c;
+}
+
+
+
+.podium-card h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.podium-card p, .score, .entry {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.panel button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+
+
+.panel {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.panel button {
+  padding: 12px 28px;
+  border: none;
+  background: #f0f4ff;
+  color: #2b6cb0;
+  font-weight: bold;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(30, 64, 175, 0.1);
+}
+
+.panel button:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+}
+
+.panel button.active {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.leaderboard {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.podium-card {
+  flex: 1;
+  border-radius: 20px;
+  padding: 24px 16px;
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.podium-card:hover {
+  transform: translateY(-4px);
+}
+
+.first {
+  background: linear-gradient(to bottom, #fef9c3, #facc15);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.3);
+}
+
+.podium-card .medal {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.podium-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0 5px;
+}
+
+.podium-card p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.rest-list {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.entry:last-child {
+  border-bottom: none;
+}
+
+.rank {
+  color: #4c51bf;
+  font-weight: bold;
+}
+
+.name {
+  flex: 1;
+  margin: 0 16px;
+  text-align: left;
+  color: #2d3748;
+}
+
+.score {
+  color: #1a202c;
+}
+
+.entry {
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Fancy background glow on hover */
+.entry::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, #c3dafe, #ffffff 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+/* Hover effect for 4th position onwards */
+.entry:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 20px rgba(56, 178, 172, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #f0f8ff;
+}
+
+.entry:hover::before {
+  opacity: 0.3;
+}
+
+/* Smooth text transition */
+.entry h3, .entry .score {
+  transition: color 0.3s ease;
+}
+
+.entry:hover h3, .entry:hover .score {
+  color: #2b6cb0;
+}
+
+/* Flip card container */
+.entry-flip {
+  perspective: 1200px;
+  margin-bottom: 20px;
+}
+
+/* Flip effect wrapper */
+.entry-inner {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+
+/* Flip on hover */
+.entry-flip:hover .entry-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front and Back */
+.entry.front, .entry.back {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s, box-shadow 0.3s;
+}
+
+/* Front Face */
+.entry.front {
+  background: linear-gradient(145deg, #ffffff, #e3f2fd);
+  z-index: 2;
+}
+
+/* Back Face */
+.entry.back {
+  background: linear-gradient(145deg, #dbeafe, #bfdbfe);
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* Front content */
+.entry.front h3 {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #1e3a8a;
+}
+
+.entry.front .score {
+  margin-top: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #2563eb;
+}
+
+/* Back content */
+.entry.back p {
+  margin: 8px 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+
+@media (max-width: 768px) {
+  .podium {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .podium-card {
+    width: 80%;
+    margin-bottom: 16px;
+  }
+}
+
+
