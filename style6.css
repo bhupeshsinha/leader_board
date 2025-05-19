@@ -228,9 +228,9 @@ h1 {
 }
 
 .podium-card.third {
-  transform: translateY(-5px);
+  transform: translateY(-15px);
   background: linear-gradient(to bottom, #ede9fe, #c4b5fd);
-  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.3);
   z-index: 1;
 }
 
