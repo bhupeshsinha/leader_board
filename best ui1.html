@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroStar Leaderboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f0fff4, #e6fffa);
+      color: #2d3748;
+      padding: 40px 20px;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2f855a;
+      margin-bottom: 10px;
+    }
+
+    .panel {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .panel button {
+      padding: 10px 24px;
+      border: 2px solid #2f855a;
+      background-color: white;
+      color: #2f855a;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .panel button:hover {
+      background-color: #e6fffa;
+    }
+
+    .panel button.active {
+      background-color: #2f855a;
+      color: white;
+      box-shadow: 0 4px 12px rgba(47, 133, 90, 0.4);
+    }
+
+    .leaderboard {
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 10px 0;
+      transition: all 0.3s ease;
+    }
+
+    .entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s ease;
+    }
+
+    .entry:hover {
+      background-color: #f7fafc;
+    }
+
+    .entry:last-child {
+      border-bottom: none;
+    }
+
+    .rank {
+      font-weight: bold;
+      color: #2f855a;
+      font-size: 18px;
+    }
+
+    .name {
+      flex: 1;
+      margin: 0 16px;
+      text-align: left;
+      font-size: 17px;
+    }
+
+    .score {
+      font-weight: 500;
+      color: #718096;
+      font-size: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .entry {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        text-align: left;
+      }
+
+      .name {
+        margin: 0;
+      }
+
+      .score {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>AgroStar Leaderboard</h1>
+
+  <div class="panel">
+    <button id="btn-tm" class="active" onclick="selectCategory('tm', this)">TM</button>
+    <button onclick="selectCategory('sm', this)">SM</button>
+    <button onclick="selectCategory('cm', this)">CM</button>
+  </div>
+
+  <div class="leaderboard" id="leaderboard">
+    <!-- Leaderboard entries will appear here -->
+  </div>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbyXujh-1t2SZxKwI3b2fsZXW995X5ijfdkwj5Z1WlXuA-n4MfF1WUasvTDXouBzkdBxLw/exec';
+
+    function displayLeaderboard(data) {
+      const container = document.getElementById('leaderboard');
+      container.innerHTML = '';
+
+      data.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <span class="rank">#${entry.rank}</span>
+          <span class="name">${entry.name}</span>
+          <span class="score">${entry.score} pts</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selectCategory(category, button) {
+      document.querySelectorAll('.panel button').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      loadLeaderboard(category);
+    }
+
+    function loadLeaderboard(category) {
+      const oldScript = document.getElementById('jsonp-script');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'jsonp-script';
+      script.src = `${BASE_URL}?type=${category}&callback=displayLeaderboard`;
+      script.onerror = () => {
+        document.getElementById('leaderboard').innerText = 'Failed to load data';
+      };
+      document.body.appendChild(script);
+    }
+
+    window.onload = () => {
+      const tmButton = document.getElementById('btn-tm');
+      selectCategory('tm', tmButton);
+    };
+  </script>
+</body>
+</html>
