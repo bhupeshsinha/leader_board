@@ -293,29 +293,52 @@ h1 {
   }
 
   .podium {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row; /* Make podium cards horizontal */
+    justify-content: center;
+    gap: 12px;
     margin: 40px 0 20px;
   }
 
   .podium-card {
-    width: 90%;
-    height: auto;
-    padding: 12px 10px;
-    margin-bottom: 12px;
+    width: 80px;
+    height: 80px;
+    padding: 8px;
+    margin-bottom: 0;
+    border-radius: 50%; /* Make them circular */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .podium-card .medal {
-    font-size: 24px;
-    margin-bottom: 6px;
+    font-size: 18px;
+    margin-bottom: 4px;
   }
 
   .podium-card h2 {
-    font-size: 18px;
+    font-size: 12px;
+    margin: 0;
   }
 
   .podium-card p {
-    font-size: 14px;
+    font-size: 11px;
+    margin: 0;
+  }
+
+  .podium-card.first {
+    transform: translateY(-10px);
+  }
+
+  .podium-card.second,
+  .podium-card.third {
+    transform: translateY(-5px);
+  }
+
+  .panel {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   .panel button {
@@ -375,3 +398,4 @@ h1 {
 
 .podium-card, .entry {
   animation: fadeIn
+}

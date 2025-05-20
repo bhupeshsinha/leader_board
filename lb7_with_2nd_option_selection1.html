@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard Selector</title>
+  <link rel="stylesheet" href="lb7_with_2nd_option_selection1.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <h1>Select Your Role</h1>
+  <div id="roleSelector" class="selector-group">
+    <button data-role="TM">TM</button>
+    <button data-role="SM">SM</button>
+    <button data-role="CM">CM</button>
+  </div>
+
+  <div id="metricSelector" class="selector-group fade-in">
+    <button data-metric="total_revenue">Total Revenue</button>
+    <button data-metric="total_return">Total Return</button>
+    <button data-metric="total_class_ab_return">Total Class AB Return</button>
+    <button data-metric="arpu">ARPU</button>
+  </div>
+
+  <div id="leaderboard">
+    <h2>🏆 Leaderboard for <span id="selectedRoleText"></span> - <span id="selectedMetricText"></span></h2>
+    <!-- Replace with dynamic leaderboard logic -->
+    <p>This is where the leaderboard will appear based on the selections.</p>
+  </div>
+
+  <script>
+    const roleButtons = document.querySelectorAll('#roleSelector button');
+    const metricButtons = document.querySelectorAll('#metricSelector button');
+    const metricSelector = document.getElementById('metricSelector');
+    const leaderboard = document.getElementById('leaderboard');
+    const selectedRoleText = document.getElementById('selectedRoleText');
+    const selectedMetricText = document.getElementById('selectedMetricText');
+
+    let selectedRole = '';
+    let selectedMetric = '';
+
+    roleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        roleButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        selectedRole = button.dataset.role;
+        selectedRoleText.textContent = selectedRole;
+        metricSelector.style.display = 'flex';
+        leaderboard.style.display = 'none';
+      });
+    });
+
+    metricButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        metricButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        selectedMetric = button.textContent;
+        selectedMetricText.textContent = selectedMetric;
+        leaderboard.style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>
