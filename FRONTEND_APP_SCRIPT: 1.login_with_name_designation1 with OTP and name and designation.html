@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <style>
+    /* Reset box-sizing */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #eff6ff 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 0 15px;
+    }
+
+    .login-card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                  0 8px 24px rgba(0, 0, 0, 0.07);
+      padding: 48px 36px;
+      text-align: center;
+      animation: fadeInUp 0.5s ease forwards;
+      position: relative;
+    }
+
+    .login-card h2 {
+      margin-bottom: 32px;
+      color: #2563eb;
+      font-weight: 600;
+      font-size: 1.75rem;
+      letter-spacing: 0.03em;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      border-radius: 14px;
+      border: 1.8px solid #cbd5e0;
+      font-size: 1.1rem;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    input[type="text"]:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
+    }
+
+    input[type="text"]:disabled {
+      background-color: #f3f4f6;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px 0;
+      font-size: 1.15rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .primary-btn:hover,
+    .primary-btn:focus {
+      background-color: #1e40af;
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.6);
+      outline: none;
+    }
+
+    .otp-section {
+      margin-top: 20px;
+      animation: fadeIn 0.4s ease forwards;
+      text-align: left;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .otp-label {
+      display: block;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #334155;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 36px 24px;
+      }
+      input[type="text"], .primary-btn {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <h2>Login with Phone Number</h2>
+      <input type="text" id="phone" placeholder="Enter your phone number" maxlength="10" />
+      <button id="getOtpBtn" class="primary-btn">Get OTP</button>
+
+      <div id="otpSection" class="otp-section hidden">
+        <label class="otp-label" for="otp">Enter OTP</label>
+        <input type="text" id="otp" placeholder="Enter OTP" maxlength="6" />
+        <button id="verifyOtpBtn" class="primary-btn">Verify & Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const phoneInput = document.getElementById('phone');
+    const otpSection = document.getElementById('otpSection');
+    const getOtpBtn = document.getElementById('getOtpBtn');
+    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+
+    getOtpBtn.onclick = () => {
+      const phone = phoneInput.value.trim();
+      if (!/^\d{10}$/.test(phone)) {
+        alert("Please enter a valid 10-digit phone number");
+        return;
+      }
+
+      // Call server-side to send OTP
+      google.script.run.withSuccessHandler(response => {
+        if (response === 'sent') {
+          alert("OTP sent to your number.");
+          otpSection.classList.remove('hidden');
+          phoneInput.disabled = true;
+          getOtpBtn.disabled = true;
+        } else if (response === 'unregistered') {
+          alert("Phone number not registered.");
+        } else {
+          alert("Unexpected response: " + response);
+        }
+      }).sendOTP(phone);
+    };
+
+    verifyOtpBtn.onclick = () => {
+      const phone = phoneInput.value.trim();
+      const otp = document.getElementById('otp').value.trim();
+      if (otp.length === 0) {
+        alert("Please enter the OTP.");
+        return;
+      }
+
+      google.script.run.withSuccessHandler(result => {
+        if (result.status === 'true') {
+          alert("Login successful!");
+
+          // Store name and designation in localStorage
+          localStorage.setItem('name', result.name);
+          localStorage.setItem('designation', result.designation);
+
+          // Redirect to leaderboard page (update URL as needed)
+          window.location.href = "http://127.0.0.1:5500/login%20page%20and%20leaderboard/landingPage.html";
+
+        } else if (result.status === 'expired') {
+          alert("OTP expired. Please request a new one.");
+        } else if (result.status === 'invalid_otp') {
+          alert("Invalid OTP. Please try again.");
+        } else if (result.status === 'not_found') {
+          alert("Phone number not registered.");
+        } else {
+          alert("Unexpected error. Please try again.");
+        }
+      }).verifyOTP(phone, otp);
+    };
+  </script>
+</body>
+</html>
