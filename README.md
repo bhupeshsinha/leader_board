@@ -1,4 +1,4 @@
-# 🏆 AGROSTAR Leaderboard Dashboard
+# 🏆 Leader Spectrum: {AGROSTAR Leaderboard Dashboard}
 
 A clean, role-based performance **Leaderboard Dashboard** for AGROSTAR's field agents: **Cluster Managers (CMs)**, **Territory Managers (TMs)**, and **Sales Managers (SMs)**. The dashboard offers a sleek, toggleable interface for comparing performance across different levels using key KPIs.
 
