@@ -2,7 +2,8 @@
 
 A clean, role-based performance **Leaderboard Dashboard** for AGROSTAR's field agents: **Cluster Managers (CMs)**, **Territory Managers (TMs)**, and **Sales Managers (SMs)**. The dashboard offers a sleek, toggleable interface for comparing performance across different levels using key KPIs.
 
-![Landing Page - SM View](./screenshots/sm_landing_page_1.png)
+![Landing Page - SM View](https://github.com/bhupeshsinha/leader_board/blob/5da788825dd65517446290636cd1a460ac22bdd6/sm_landing%20page%201.png?raw=true)
+
 
 ---
 
@@ -42,17 +43,14 @@ AGROSTAR's field force hierarchy includes:
 
 > You can find more screenshots in the `screenshots/` folder.
 
-### SM Dashboard - Landing Page  
-![SM Landing Page](./screenshots/sm_landing_page_1.png)
-
 ### State-Level View for SM  
-![State Level SM](./screenshots/sm_State_level_3.png)
+![State Level SM](https://github.com/bhupeshsinha/leader_board/blob/5da788825dd65517446290636cd1a460ac22bdd6/sm_State_level%203.png?raw=true)
 
 ### Organization-Level View for SM  
-![Organization Level SM](./screenshots/sm_organization_level_4.png)
+![Organization Level SM](https://github.com/bhupeshsinha/leader_board/blob/5da788825dd65517446290636cd1a460ac22bdd6/combined_view_tm_5.png)
 
 ### TM Combined View  
-![Combined View TM](./screenshots/combined_view_tm_6.png)
+![Combined View TM](https://github.com/bhupeshsinha/leader_board/blob/5da788825dd65517446290636cd1a460ac22bdd6/combined_view_tm_6.png)
 
 ### CM Organization View  
 *(Pending image if available)*
